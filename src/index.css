@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.btn-lg{
+  width:100%;
+  height:100%;
+  color: black !important;
+  border-style: solid;
+  border-width: 6px 6px 6px 6px !important;
+  border-color:black !important;
+}
+.title-font {
+  color: black !important;
+  font-family: "Comic Sans MS";
+  font-size: 40px !important;
+}
