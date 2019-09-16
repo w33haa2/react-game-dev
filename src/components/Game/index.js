@@ -7,7 +7,7 @@ class Game extends React.Component {
         return (
             <div className="card vertical-center">
                 <div className="card-body">
-                    <span    className="btn title-font btn-lg btn-warning">05.000</span>
+                    <span    className="btn title-font btn-lg btn-warning p-1">05.000</span>
                     <table style={{height:"600px",width:"600px", textAlign:"center"}} className=" table-bordered">
                         <thead>
                         <tr style={{height:"100px", textAlign:"center"}}>
@@ -35,9 +35,12 @@ class Game extends React.Component {
                         </tr>
                         </tbody>
                     </table>
-                    <div className="bottomdiv " >
-                        <div class="row">
+                    <br/>
+                    <div className="row " >
+                        <div class="col-md-6">
                         <button onClick={this.props.toggle}  className="btn title-font btn-lg btn-warning">Start</button>
+                        </div>
+                        <div class="col-md-6">
                         <button onClick={this.props.toggle}  className="btn title-font btn-lg btn-warning">Go Back</button>
                         </div>
                     </div>
