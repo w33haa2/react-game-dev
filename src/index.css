@@ -19,8 +19,36 @@ code {
   border-width: 6px 6px 6px 6px !important;
   border-color:black !important;
 }
+.table-bordered {
+  border-style: solid !important;
+  border-width: 6px 6px 6px 6px !important;
+  border-color:black !important;
+}
+
+.bdr {
+  border-style: solid !important;
+  border-width: 6px 6px 6px 6px !important;
+  border-color:black !important;
+}
+.hover-rock:hover tr {
+  color: #fff;
+  background-color: #0062cc;
+  border-color: #005cbf;
+}
+.btn-block {
+  height:100% !important;
+}
 .title-font {
   color: black !important;
   font-family: "Comic Sans MS";
   font-size: 40px !important;
+}
+.game-title {
+  color: black !important;
+  font-family: "Comic Sans MS";
+}
+.bottomdiv {
+  position:absolute;
+  bottom:0;
+  left:40%;
 }
