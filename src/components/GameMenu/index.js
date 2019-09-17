@@ -50,7 +50,7 @@ class GameMenu extends React.Component {
         else if(this.state.gameState && !this.state.menuState) {
             instructionButton =
                 <div >
-                    <Game toggle={this.handleChange} />
+                    <Game toggle={this.handleStartGame} />
                 </div>
         }
         else if(this.state.instructionState && !this.state.menuState) {

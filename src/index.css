@@ -25,6 +25,19 @@ code {
   border-color:black !important;
 }
 
+.bdr {
+  border-style: solid !important;
+  border-width: 6px 6px 6px 6px !important;
+  border-color:black !important;
+}
+.hover-rock:hover tr {
+  color: #fff;
+  background-color: #0062cc;
+  border-color: #005cbf;
+}
+.btn-block {
+  height:100% !important;
+}
 .title-font {
   color: black !important;
   font-family: "Comic Sans MS";
