@@ -15,19 +15,32 @@ class Game extends React.Component {
             },
             isIdle: true,
             cardSets: ['ROCK','PAPER','SCISSOR','MINES'],
-            cardSelectionForRound: ['rock', 'paper', 'scissor'],
+            cardOfTheRound: '',
+            prevCard: '',
             tempCard: '',
             seconds: 5
         };
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
         this.selectCard = this.selectCard.bind(this);
+        this.selectCard2 = this.selectCard2.bind(this);
         this.countDown = this.countDown.bind(this);
     }
-
+    checkWhoWins() {
+        return this.state.p1 === 5  || this.state.p2 === 5
+    }
     selectCard(e) {
         if (this.state.time.s  > 0 && this.state.isIdle === false) {
-            this.setState({p1Select: e.currentTarget.textContent})
+            this.setState({
+                prevCard: '',
+                p1Select: e.currentTarget.textContent})
+        }
+    }
+    selectCard2(e) {
+        if (this.state.time.s  > 0 && this.state.isIdle === false) {
+            this.setState({
+                prevCard: e.currentTarget.textContent,
+                p1Select: e.currentTarget.textContent})
         }
     }
     secondsToTime(secs){
@@ -57,8 +70,15 @@ class Game extends React.Component {
             isIdle: false,
         })
         if (this.timer == 0 && this.state.seconds > 0) {
+            this.selectCardOfTheRound()
             this.timer = setInterval(this.countDown, 1000);
         }
+    }
+    selectCardOfTheRound() {
+        let noMinesPls = this.state.cardSets.filter(x => x !== 'MINES')
+       this.setState({
+           cardOfTheRound: noMinesPls[Math.floor(Math.random() * 3)]
+       })
     }
 
     countDown() {
@@ -71,22 +91,53 @@ class Game extends React.Component {
 
         // Check if we're at zero.
         if (seconds == 0) {
-            let rand1 = this.state.cardSets[Math.floor(Math.random() * this.state.cardSets.length)]
             let rand2 = this.state.cardSets[Math.floor(Math.random() * this.state.cardSets.length)]
             let blessedRNG1 = Math.random() * 100
+            let cardOfTheRoundRNG = Math.random() * 100
             let blessedRNG2 = Math.random() * 100
-            if(this.state.p1Select === "") {
-                this.setState({p1Select: rand1})
+            let prev = this.state.p1Select
+            if(this.state.p1Select !== "") {
+                if (this.state.cardOfTheRound !== this.state.p1Select) {
+                    if (blessedRNG1 <= 30) {
+                        /**
+                         * Psuedo Random Number Generator for Normal Cards P1
+                         * 50% chance to execute
+                         */
+                        this.setState({
+                            prevCard: prev,
+                            p1Select: "MINES"
+                        })
+
+                    }
+                } else {
+                    /**
+                     * Psuedo Random Number Generator for the Card of the Round
+                     * 50% chance to execute
+                     */
+                    if (cardOfTheRoundRNG <= 50) {
+                        this.setState({p1Select: "MINES"})
+                    }
+                }
+                if (blessedRNG2 <= 30) {
+                    /**
+                     * Psuedo Random Number Generator for Normal Cards P2
+                     * 50% chance to execute
+                     */
+                    this.setState({p2Select: "MINES"})
+                }
+                this.setState({p2Select: rand2})
             }
-            if(blessedRNG1 <= 30) {
-                this.setState({p1Select: "MINES"})
-            }
-            if (blessedRNG2  <= 30) {
-                this.setState({p2Select: "MINES"})
-            }
-            this.setState({p2Select: rand2})
             clearInterval(this.timer)
-            this.evaluateScore(this.compare(this.state.p1Select,this.state.p2Select))
+            if(this.state.p1Select === "") {
+                // this.setState({p1Select: rand1})
+                this.evaluateScore({
+                    p1: false,
+                    p2: true
+                })
+            }
+            if(this.state.p1Select !== "") {
+                this.evaluateScore(this.compare(this.state.p1Select, this.state.p2Select))
+            }
         }
     }
 
@@ -96,34 +147,43 @@ class Game extends React.Component {
         if(p1 && !p2) {
             if(this.state.p2Select === 'MINES') {
                 this.setState({
-                    p1: score1 + 1,
+                    p1: this.state.prevCard === this.state.cardOfTheRound ?
+                         score1 + 2 : score1 + 1,
                     p2: score2 - 1
                 })
             }
             else {
                 this.setState({
-                    p1: score1 + 1,
+                    p1: this.state.prevCard === this.state.cardOfTheRound ?
+                        score1 + 2 : score1 + 1,
                 })
             }
         }
-        else if (p2 && !p1) {
+         if (p2 && !p1) {
             if(this.state.p1Select === 'MINES') {
                 this.setState({
                     p2: score2 + 1,
-                    p1: score1 - 1
+                    p1: this.state.prevCard === this.state.cardOfTheRound ?
+                        score1 - 2 : score1 - 1
                 })
             }
+             if(this.state.prevCard === this.state.cardOfTheRound) {
+                 this.setState({
+                     p1: score1 - 2,
+                 })
+             }
             else {
                 this.setState({
                     p2: score2 + 1,
                 })
             }
         }
-        else if (!p1 && !p2) {
-            if(this.state.p1Select === 'MINES' && this.state.p2Select === 'MINES') {
+        if (!p1 && !p2) {
+            if(this.state.prevCard === 'MINES' && this.state.p2Select === 'MINES') {
                 this.setState({
                     p2: score2 - 1,
-                    p1: score1 - 1
+                    p1: this.state.prevCard === this.state.cardOfTheRound ?
+                        score1 - 2 : score1 - 1
                 })
             }
         }
@@ -135,14 +195,17 @@ class Game extends React.Component {
             seconds: 5,
             isIdle: true,
         })
-        setTimeout(() => {
-            this.setState({
-                p1Select: "",
-                p2Select: "",
-            })
-            this.timer = 0
-            this.startTimer()
-        }, 4000);
+        if(!this.checkWhoWins()) {
+            setTimeout(() => {
+                this.setState({
+                    p1Select: "",
+                    p2Select: "",
+                    prev: "",
+                })
+                this.timer = 0
+                this.startTimer()
+            }, 4000);
+        }
     }
 
     compare (p1,p2) {
@@ -249,11 +312,21 @@ class Game extends React.Component {
                     <th className="text-center game-title">-</th>
                 </tr>
         }
+        let timerPanel
+        if(this.checkWhoWins()) {
+            timerPanel =
+                <span    className="btn title-font btn-lg btn-warning p-1"> {this.state.p1 >= 5
+                    ? 'PLAYER 1 WINS' : 'THE AI WINS LMAO XD'}</span>
+        }
+        else {
+            timerPanel = <span    className="btn title-font btn-lg btn-warning p-1"> {this.state.time.s != 0
+                ? this.state.time.s : 'STOP!'}</span>
 
+        }
         return (
             <div className="card vertical-center">
                 <div className="card-body">
-                    <span    className="btn title-font btn-lg btn-warning p-1"> {this.state.time.s != 0 ? this.state.time.s : 'STOP!'}</span>
+                    {timerPanel}
                     <table style={{height:"600px",width:"600px", textAlign:"center"}} className=" table-bordered">
                         <thead>
                         <tr style={{height:"100px", textAlign:"center"}}>
@@ -275,7 +348,9 @@ class Game extends React.Component {
                         </tr>
                         <tr>
                             <td onClick={this.selectCard} className="text-center bdr btn-success game-title">SCISSOR</td>
-                            <td onClick={this.selectCard} className="text-center bdr btn-danger game-title">SCISSOR</td>
+                            <td onClick={this.selectCard2} className="text-center bdr btn-danger game-title">{
+                                this.state.cardOfTheRound !== "" ? this.state.cardOfTheRound : "???"
+                            }</td>
                         </tr>
                         </tbody>
                     </table>

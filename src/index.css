@@ -38,6 +38,10 @@ code {
 .btn-block {
   height:100% !important;
 }
+table {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
 .title-font {
   color: black !important;
   font-family: "Comic Sans MS";
