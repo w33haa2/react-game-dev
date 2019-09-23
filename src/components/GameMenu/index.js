@@ -35,14 +35,11 @@ class GameMenu extends React.Component {
                 <img className="img-fluid" src={logo} style={{height:"100%"}}   alt="t e c h i e s g a m e t i t l e"/>
                 </div>
                 <div className="row">
-                <div className="col-md-4" >
+                <div className="col-md-6" >
                     <button onClick={this.handleChange}  className="btn title-font btn-lg btn-warning">Instructions</button>
                 </div>
-                <div className="col-md-4" >
+                <div className="col-md-6" >
                     <button onClick={this.handleStartGame}  className="btn title-font btn-lg btn-warning">Start Game</button>
-                </div>
-                <div className="col-md-4" >
-                    <button onClick={this.handleChange}  className="btn title-font btn-lg btn-warning">Exit</button>
                 </div>
                 </div>
             </div>
