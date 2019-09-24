@@ -1,5 +1,4 @@
 import React from 'react'
-import ms from 'pretty-ms'
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -26,9 +25,19 @@ class Game extends React.Component {
         this.selectCard2 = this.selectCard2.bind(this);
         this.countDown = this.countDown.bind(this);
     }
+
+    /**
+     * Checks the state on which side wins
+     * @returns {boolean}
+     */
     checkWhoWins() {
-        return this.state.p1 === 5  || this.state.p2 === 5
+        return this.state.p1 >= 5  || this.state.p2 >= 5
     }
+
+    /**
+     * Selects the card of the player 1
+     * @param e
+     */
     selectCard(e) {
         if (this.state.time.s  > 0 && this.state.isIdle === false) {
             this.setState({
@@ -36,6 +45,11 @@ class Game extends React.Component {
                 p1Select: e.currentTarget.textContent})
         }
     }
+
+    /**
+     * Selects card of the round for player 1
+     * @param e
+     */
     selectCard2(e) {
         if (this.state.time.s  > 0 && this.state.isIdle === false) {
             this.setState({
@@ -43,6 +57,12 @@ class Game extends React.Component {
                 p1Select: e.currentTarget.textContent})
         }
     }
+
+    /**
+     * Computes the remaining time in countdown
+     * @param secs
+     * @returns {{s: number, h: number, m: number}}
+     */
     secondsToTime(secs){
         let hours = Math.floor(secs / (60 * 60));
 
@@ -60,11 +80,17 @@ class Game extends React.Component {
         return obj;
     }
 
+    /**
+     * Checks if component mounted
+     */
     componentDidMount() {
         let timeLeftVar = this.secondsToTime(this.state.seconds);
         this.setState({ time: timeLeftVar });
     }
 
+    /**
+     * Starts the timer
+     */
     startTimer() {
         this.setState({
             isIdle: false,
@@ -74,6 +100,10 @@ class Game extends React.Component {
             this.timer = setInterval(this.countDown, 1000);
         }
     }
+
+    /**
+     * Picks a random card (except for mines) as card of the round
+     */
     selectCardOfTheRound() {
         let noMinesPls = this.state.cardSets.filter(x => x !== 'MINES')
        this.setState({
@@ -81,6 +111,9 @@ class Game extends React.Component {
        })
     }
 
+    /**
+     * Renders countdown
+     */
     countDown() {
         // Remove one second, set state so a re-render happens.
         let seconds = this.state.seconds - 1;
@@ -141,6 +174,11 @@ class Game extends React.Component {
         }
     }
 
+    /**
+     * Evaluates the score of the players
+     * @param p1
+     * @param p2
+     */
     evaluateScore({p1, p2}) {
         let score1 = this.state.p1
         let score2 = this.state.p2
@@ -207,7 +245,12 @@ class Game extends React.Component {
             }, 4000);
         }
     }
-
+    /**
+     *  Compare the selection of the players
+     * @param p1
+     * @param p2
+     * @returns {{p1: boolean, p2: boolean}}
+     */
     compare (p1,p2) {
 
         if(p1 === p2) {
@@ -297,12 +340,15 @@ class Game extends React.Component {
     }
 
     render() {
+        /**
+         * Conditional render for  Player Status
+         */
         let gameState;
         if (this.state.isIdle) {
             gameState =
             <tr>
-                <th className="text-center game-title">{ this.state.gameStatus.p1 ? 'WIN' : 'LOSE' }</th>
-                <th className="text-center game-title">{ this.state.gameStatus.p2 ? 'WIN' : 'LOSE' }</th>
+                <th className="noselect text-center game-title">{ this.state.gameStatus.p1 ? 'WIN' : 'LOSE' }</th>
+                <th className="noselect text-center game-title">{ this.state.gameStatus.p2 ? 'WIN' : 'LOSE' }</th>
             </tr>
         }
         else {
@@ -313,6 +359,9 @@ class Game extends React.Component {
                 </tr>
         }
         let timerPanel
+        /**
+         * Conditional Render for Timer and Winner's Panel
+         */
         if(this.checkWhoWins()) {
             timerPanel =
                 <span    className="btn title-font btn-lg btn-warning p-1"> {this.state.p1 >= 5
@@ -330,25 +379,25 @@ class Game extends React.Component {
                     <table style={{height:"600px",width:"600px", textAlign:"center"}} className=" table-bordered">
                         <thead>
                         <tr style={{height:"100px", textAlign:"center"}}>
-                            <th className="text-center bdr game-title"><h1>{ this.state.p1 }</h1></th>
-                            <th className="text-center bdr game-title"><h1>{ this.state.p2 }</h1></th>
+                            <th className="noselect text-center bdr game-title"><h1>{ this.state.p1 }</h1></th>
+                            <th className="noselect text-center bdr game-title"><h1>{ this.state.p2 }</h1></th>
                         </tr>
                        { gameState }
                         </thead>
                         <tbody>
                         <tr style={{height:"70%", textAlign:"center"}}>
-                            <td className="text-center bdr game-title" >{ this.state.p1Select ? this.state.p1Select :
+                            <td className="noselect text-center bdr game-title" >{ this.state.p1Select ? this.state.p1Select :
                             '- -'}</td>
-                            <td className="text-center bdr game-title" >{ this.state.p2Select ? this.state.p2Select :
+                            <td className="noselect text-center bdr game-title" >{ this.state.p2Select ? this.state.p2Select :
                                 '- -'}</td>
                         </tr>
                         <tr >
-                            <td onClick={this.selectCard} className=" btn-primary   bdr text-center game-title">ROCK</td>
-                            <td onClick={this.selectCard} className="btn-warning bdr text-center game-title">PAPER</td>
+                            <td onClick={this.selectCard} className="noselect btn-primary   bdr text-center game-title">ROCK</td>
+                            <td onClick={this.selectCard} className="noselect btn-warning bdr text-center game-title">PAPER</td>
                         </tr>
                         <tr>
-                            <td onClick={this.selectCard} className="text-center bdr btn-success game-title">SCISSOR</td>
-                            <td onClick={this.selectCard2} className="text-center bdr btn-danger game-title">{
+                            <td onClick={this.selectCard} className="noselect text-center bdr btn-success game-title">SCISSOR</td>
+                            <td onClick={this.selectCard2} className="noselect text-center bdr btn-danger game-title">{
                                 this.state.cardOfTheRound !== "" ? this.state.cardOfTheRound : "???"
                             }</td>
                         </tr>
