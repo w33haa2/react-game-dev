@@ -1,4 +1,9 @@
 import React from 'react'
+import rock from '../../images/rock.png'
+import paper from '../../images/paper.png'
+import mines from '../../images/mines.png'
+import scissors from '../../images/scissors.jpg'
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -42,7 +47,7 @@ class Game extends React.Component {
         if (this.state.time.s  > 0 && this.state.isIdle === false) {
             this.setState({
                 prevCard: '',
-                p1Select: e.currentTarget.textContent})
+                p1Select: e})
         }
     }
 
@@ -53,8 +58,8 @@ class Game extends React.Component {
     selectCard2(e) {
         if (this.state.time.s  > 0 && this.state.isIdle === false) {
             this.setState({
-                prevCard: e.currentTarget.textContent,
-                p1Select: e.currentTarget.textContent})
+                prevCard: e,
+                p1Select: e})
         }
     }
 
@@ -372,6 +377,102 @@ class Game extends React.Component {
                 ? this.state.time.s : 'STOP!'}</span>
 
         }
+        let cardOfTheRoundPic
+        /**
+         * Conditional Render for card of the round picture
+         */
+        if(this.state.cardOfTheRound === 'ROCK') {
+            cardOfTheRoundPic =
+                <td onClick={ () =>this.selectCard2(this.state.cardOfTheRound )} className="noselect text-center bdr btn-danger game-title">
+                    <img width={140} src={rock}/>
+                </td>
+        }
+        else if (this.state.cardOfTheRound === 'PAPER') {
+            cardOfTheRoundPic =
+                <td onClick={() => this.selectCard2(this.state.cardOfTheRound )} className="noselect text-center bdr btn-danger game-title">
+                    <img width={105} src={paper}/>
+                </td>
+        }
+        else if (this.state.cardOfTheRound === 'SCISSOR') {
+            cardOfTheRoundPic =
+                <td onClick={ () => this.selectCard2(this.state.cardOfTheRound )} className="noselect text-center bdr btn-danger game-title">
+                    <img width={105} src={scissors}/>
+                </td>
+        }
+        else {
+            cardOfTheRoundPic =
+            <td onClick={this.selectCard2} className="noselect text-center bdr btn-danger game-title">
+                ???
+            </td>
+        }
+        let playerSelect1
+        /**
+         * Conditional Render for card of the round picture p1 select
+         */
+        if(this.state.p1Select === 'ROCK') {
+            playerSelect1 =
+            <td className="noselect text-center bdr game-title" >
+                    <img width={140} src={rock}/>
+            </td>
+        }
+        else if (this.state.p1Select === 'PAPER') {
+            playerSelect1 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={105} src={paper}/>
+                </td>
+        }
+        else if (this.state.p1Select === 'SCISSOR') {
+            playerSelect1 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={105} src={scissors}/>
+                </td>
+        }
+        else if (this.state.p1Select === 'MINES') {
+            playerSelect1 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={105} src={mines}/>
+                </td>
+        }
+        else {
+            playerSelect1 =
+                <td className="noselect text-center bdr game-title" >
+                    - -
+                </td>
+        }
+        let playerSelect2
+        /**
+         * Conditional Render for card of the round picture p1 select
+         */
+        if(this.state.p2Select === 'ROCK') {
+            playerSelect2 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={140} src={rock}/>
+                </td>
+        }
+        else if (this.state.p2Select === 'PAPER') {
+            playerSelect2 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={105} src={paper}/>
+                </td>
+        }
+        else if (this.state.p2Select === 'SCISSOR') {
+            playerSelect2 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={105} src={scissors}/>
+                </td>
+        }
+        else if (this.state.p2Select === 'MINES') {
+            playerSelect2 =
+                <td className="noselect text-center bdr game-title" >
+                    <img width={105} src={mines}/>
+                </td>
+        }
+        else {
+            playerSelect2 =
+                <td className="noselect text-center bdr game-title" >
+                    - -
+                </td>
+        }
         return (
             <div className="card vertical-center">
                 <div className="card-body">
@@ -386,20 +487,22 @@ class Game extends React.Component {
                         </thead>
                         <tbody>
                         <tr style={{height:"70%", textAlign:"center"}}>
-                            <td className="noselect text-center bdr game-title" >{ this.state.p1Select ? this.state.p1Select :
-                            '- -'}</td>
-                            <td className="noselect text-center bdr game-title" >{ this.state.p2Select ? this.state.p2Select :
-                                '- -'}</td>
+                            {playerSelect1}
+                            {playerSelect2}
                         </tr>
                         <tr >
-                            <td onClick={this.selectCard} className="noselect btn-primary   bdr text-center game-title">ROCK</td>
-                            <td onClick={this.selectCard} className="noselect btn-warning bdr text-center game-title">PAPER</td>
+                            <td onClick={() => this.selectCard('ROCK')}  className="noselect btn-primary   bdr text-center game-title">
+                                <img width={140} src={rock}/>
+                            </td>
+                            <td onClick={() => this.selectCard('PAPER')} className="noselect btn-warning bdr text-center game-title">
+                                <img width={105} src={paper}/>
+                            </td>
                         </tr>
                         <tr>
-                            <td onClick={this.selectCard} className="noselect text-center bdr btn-success game-title">SCISSOR</td>
-                            <td onClick={this.selectCard2} className="noselect text-center bdr btn-danger game-title">{
-                                this.state.cardOfTheRound !== "" ? this.state.cardOfTheRound : "???"
-                            }</td>
+                            <td onClick={() => this.selectCard('SCISSOR')} className="noselect text-center bdr btn-success game-title">
+                                <img width={105} src={scissors}/>
+                            </td>
+                            {cardOfTheRoundPic}
                         </tr>
                         </tbody>
                     </table>
